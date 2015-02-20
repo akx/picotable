@@ -4,7 +4,7 @@ var _ = require("lodash");
 var app = express();
 app.use(express.static(__dirname + "/.."));
 
-var items = _.map(_.range(42, 1337), function(i) {
+var database = _.map(_.range(42, 1337), function(i) {
     return {
         id: i,
         name: "Thing " + i,
@@ -12,6 +12,7 @@ var items = _.map(_.range(42, 1337), function(i) {
         color: ["Red", "Green", "Blue"][(0 | (i * 1.2343)) % 3]
     };
 });
+var colorChoices = _(database).pluck("color").uniq().map(function(p){return [p, p]}).value();
 
 app.get("/", function(req, res) {
     res.send(fs.readFileSync(__dirname + "/demo.html", "UTF-8"));
@@ -23,19 +24,28 @@ app.get("/data", function(req, res) {
     var pageNum = 0 | query.page;
     var start = (pageNum - 1) * perPage;
     var end = (pageNum) * perPage - 1;
+    var filteredDatabase = database;
+    if(query.filters) {
+        filteredDatabase = _.filter(filteredDatabase, function(item) {
+            return _.all(query.filters, function(value, key) {
+                return item[key] === value;
+            });
+        });
+    }
+
     var data = {
         "columns": [
             {"id": "name", "title": "Name"},
-            {"id": "color", "title": "Color"},
+            {"id": "color", "title": "Color", "filter": {"choices": colorChoices}},
             {"id": "age", "title": "Age", "className": "text-right"}
         ],
         "pagination": {
-            "nItems": items.length,
-            "nPages": Math.ceil(items.length / perPage),
+            "nItems": filteredDatabase.length,
+            "nPages": Math.ceil(filteredDatabase.length / perPage),
             "perPage": perPage,
             "pageNum": pageNum
         },
-        "items": _.slice(items, start, end)
+        "items": _.slice(filteredDatabase, start, end)
     };
     res.send(data);
 });

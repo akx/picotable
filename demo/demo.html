@@ -2,10 +2,14 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="./vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/simplex/bootstrap.min.css">
 </head>
 <body>
-    <div class="container" id="c"></div>
+    <div class="container">
+        <h1>Picotable Demo</h1>
+        <div id="c"></div>
+    </div>
     <script src="./vendor/mithril.js"></script>
     <script src="./src/picotable.js"></script>
     <script>new Picotable(document.getElementById("c"), "/data");</script>
