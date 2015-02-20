@@ -1,0 +1,17 @@
+{
+  "name": "picotable",
+  "version": "0.0.0",
+  "description": "",
+  "main": "picotable.js",
+  "scripts": {
+    "demo": "node demo",
+    "dist": "cat vendor/mithril.js src/picotable.js | uglifyjs -c > picotable.min.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "express": "^4.11.2",
+    "lodash": "^3.2.0",
+    "uglify-js": "^2.4.16"
+  }
+}
